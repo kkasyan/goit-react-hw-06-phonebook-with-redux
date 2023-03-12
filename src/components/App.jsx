@@ -1,11 +1,10 @@
 import css from './app.module.css';
-import { useState, useCallback, useMemo } from 'react';
+
 import { useSelector, useDispatch } from 'react-redux';
-
-import { addContact, removeContact } from 'redux/actions';
-import { getContacts } from 'redux/selectors';
-
-import { nanoid } from 'nanoid';
+import { addContact, removeContact } from 'redux/contacts/actions';
+import { setFilter } from 'redux/filter/actions';
+import { getFilteredContacts } from 'redux/contacts/selectors';
+import { getFilter } from 'redux/filter/selectors';
 
 import ContactForm from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
@@ -15,7 +14,8 @@ import useLocalStorage from 'hooks/useLocalStorage';
 import { filterContacts } from './filterContacts';
 
 export const App = () => {
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(getFilteredContacts);
+  const filter = useSelector(getFilter);
 
   const dispatch = useDispatch();
 
@@ -26,6 +26,10 @@ export const App = () => {
 
   const onRemoveContact = payload => {
     dispatch(removeContact(payload));
+  };
+
+  const onSetFilter = ({ target }) => {
+    dispatch(setFilter(target.value));
   };
 
   // const [contacts, setContacts] = useLocalStorage({
@@ -101,7 +105,7 @@ export const App = () => {
       <ContactForm onSubmit={onAddContact} />
       <section className={css.list}>
         <h2 className={css.contactsHeader}>Contacts</h2>
-        {contacts.length > 0 && <Filter />}
+        <Filter onChange={onSetFilter} value={filter} />
         {contacts.length > 0 ? (
           <ContactList items={contacts} removeContact={onRemoveContact} />
         ) : (

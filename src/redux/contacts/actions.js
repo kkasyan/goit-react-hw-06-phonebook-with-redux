@@ -1,4 +1,4 @@
-import { ADD_CONTACT, DELETE_CONTACT } from './constants';
+import { ADD_CONTACT, DELETE_CONTACT} from './constants';
 import { nanoid } from 'nanoid';
 
 export const addContact = payload => {
@@ -8,3 +8,5 @@ export const addContact = payload => {
 export const removeContact = payload => {
   return { type: DELETE_CONTACT, payload };
 };
+
+
